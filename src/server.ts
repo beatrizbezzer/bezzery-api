@@ -7,6 +7,7 @@ import { userRoutes } from './routes/users'
 import { postRoutes } from './routes/posts'
 import { followRoutes } from './routes/follows'
 import { notificationRoutes } from './routes/notifications'
+import { messageRoutes } from './routes/messages'
 
 const app = Fastify({
   logger: {
@@ -41,6 +42,7 @@ async function bootstrap() {
   await app.register(postRoutes)
   await app.register(followRoutes)
   await app.register(notificationRoutes)
+  await app.register(messageRoutes)
 
   app.setErrorHandler((error, _request, reply) => {
     app.log.error(error)
