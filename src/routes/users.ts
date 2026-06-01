@@ -49,6 +49,7 @@ export async function userRoutes(app: FastifyInstance) {
       avatarUrl: user.avatarUrl,
       bannerUrl: user.bannerUrl,
       bgColor: user.bgColor,
+      profileEffect: user.profileEffect,
       tags: JSON.parse(user.tags),
       country: user.country,
       createdAt: user.createdAt,
@@ -107,11 +108,12 @@ export async function userRoutes(app: FastifyInstance) {
   app.put('/users/me', { preHandler: authenticate }, async (request, reply) => {
     const currentUser = request.user as { id: string }
 
-    const { bio, avatarUrl, bannerUrl, bgColor, tags, name, country } = request.body as {
+    const { bio, avatarUrl, bannerUrl, bgColor, profileEffect, tags, name, country } = request.body as {
       bio?: string
       avatarUrl?: string
       bannerUrl?: string
       bgColor?: string | null
+      profileEffect?: string | null
       tags?: string[]
       name?: string
       country?: string
@@ -123,6 +125,7 @@ export async function userRoutes(app: FastifyInstance) {
     if (avatarUrl !== undefined) updateData.avatarUrl = avatarUrl
     if (bannerUrl !== undefined) updateData.bannerUrl = bannerUrl
     if (bgColor !== undefined) updateData.bgColor = bgColor
+    if (profileEffect !== undefined) updateData.profileEffect = profileEffect
     if (country !== undefined) updateData.country = country
     if (name !== undefined) {
       if (!name.trim()) {
@@ -160,6 +163,7 @@ export async function userRoutes(app: FastifyInstance) {
       avatarUrl: user.avatarUrl,
       bannerUrl: user.bannerUrl,
       bgColor: user.bgColor,
+      profileEffect: user.profileEffect,
       tags: JSON.parse(user.tags),
       country: user.country,
       createdAt: user.createdAt,

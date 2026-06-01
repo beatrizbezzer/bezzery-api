@@ -16,8 +16,9 @@ model User {
   bio       String?
   avatarUrl String?
   bannerUrl String?
-  bgColor   String?
-  tags      String   @default("[]")
+  bgColor       String?
+  profileEffect String?
+  tags          String   @default("[]")
   country   String?
   createdAt DateTime @default(now())
 
