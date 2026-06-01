@@ -48,6 +48,7 @@ export async function userRoutes(app: FastifyInstance) {
       bio: user.bio,
       avatarUrl: user.avatarUrl,
       bannerUrl: user.bannerUrl,
+      bgColor: user.bgColor,
       tags: JSON.parse(user.tags),
       country: user.country,
       createdAt: user.createdAt,
@@ -106,10 +107,11 @@ export async function userRoutes(app: FastifyInstance) {
   app.put('/users/me', { preHandler: authenticate }, async (request, reply) => {
     const currentUser = request.user as { id: string }
 
-    const { bio, avatarUrl, bannerUrl, tags, name, country } = request.body as {
+    const { bio, avatarUrl, bannerUrl, bgColor, tags, name, country } = request.body as {
       bio?: string
       avatarUrl?: string
       bannerUrl?: string
+      bgColor?: string | null
       tags?: string[]
       name?: string
       country?: string
@@ -120,6 +122,7 @@ export async function userRoutes(app: FastifyInstance) {
     if (bio !== undefined) updateData.bio = bio
     if (avatarUrl !== undefined) updateData.avatarUrl = avatarUrl
     if (bannerUrl !== undefined) updateData.bannerUrl = bannerUrl
+    if (bgColor !== undefined) updateData.bgColor = bgColor
     if (country !== undefined) updateData.country = country
     if (name !== undefined) {
       if (!name.trim()) {
@@ -156,6 +159,7 @@ export async function userRoutes(app: FastifyInstance) {
       bio: user.bio,
       avatarUrl: user.avatarUrl,
       bannerUrl: user.bannerUrl,
+      bgColor: user.bgColor,
       tags: JSON.parse(user.tags),
       country: user.country,
       createdAt: user.createdAt,
