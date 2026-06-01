@@ -50,6 +50,9 @@ export async function userRoutes(app: FastifyInstance) {
       bannerUrl: user.bannerUrl,
       bgImage: user.bgImage,
       profileEffect: user.profileEffect,
+      cardBorder: user.cardBorder,
+      cardSticker: user.cardSticker,
+      cardOverlay: user.cardOverlay,
       tags: JSON.parse(user.tags),
       country: user.country,
       createdAt: user.createdAt,
@@ -108,12 +111,15 @@ export async function userRoutes(app: FastifyInstance) {
   app.put('/users/me', { preHandler: authenticate }, async (request, reply) => {
     const currentUser = request.user as { id: string }
 
-    const { bio, avatarUrl, bannerUrl, bgImage, profileEffect, tags, name, country } = request.body as {
+    const { bio, avatarUrl, bannerUrl, bgImage, profileEffect, cardBorder, cardSticker, cardOverlay, tags, name, country } = request.body as {
       bio?: string
       avatarUrl?: string
       bannerUrl?: string
       bgImage?: string | null
       profileEffect?: string | null
+      cardBorder?: string | null
+      cardSticker?: string | null
+      cardOverlay?: string | null
       tags?: string[]
       name?: string
       country?: string
@@ -126,6 +132,9 @@ export async function userRoutes(app: FastifyInstance) {
     if (bannerUrl !== undefined) updateData.bannerUrl = bannerUrl
     if (bgImage !== undefined) updateData.bgImage = bgImage
     if (profileEffect !== undefined) updateData.profileEffect = profileEffect
+    if (cardBorder !== undefined) updateData.cardBorder = cardBorder
+    if (cardSticker !== undefined) updateData.cardSticker = cardSticker
+    if (cardOverlay !== undefined) updateData.cardOverlay = cardOverlay
     if (country !== undefined) updateData.country = country
     if (name !== undefined) {
       if (!name.trim()) {
@@ -164,6 +173,9 @@ export async function userRoutes(app: FastifyInstance) {
       bannerUrl: user.bannerUrl,
       bgImage: user.bgImage,
       profileEffect: user.profileEffect,
+      cardBorder: user.cardBorder,
+      cardSticker: user.cardSticker,
+      cardOverlay: user.cardOverlay,
       tags: JSON.parse(user.tags),
       country: user.country,
       createdAt: user.createdAt,

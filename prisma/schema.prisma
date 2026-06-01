@@ -18,6 +18,9 @@ model User {
   bannerUrl String?
   bgImage       String?
   profileEffect String?
+  cardBorder    String?
+  cardSticker   String?
+  cardOverlay   String?
   tags          String   @default("[]")
   country   String?
   createdAt DateTime @default(now())
