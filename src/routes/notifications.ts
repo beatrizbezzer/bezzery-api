@@ -86,7 +86,13 @@ export async function notificationRoutes(app: FastifyInstance) {
     send({ type: 'init', unreadCount })
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const listener = (notif: any) => send({ type: 'notification', notification: notif })
+    const listener = (payload: any) => {
+      if (payload.type === 'message') {
+        send(payload)
+      } else {
+        send({ type: 'notification', notification: payload })
+      }
+    }
     notifEmitter.on(`user:${userId}`, listener)
 
     const keepAlive = setInterval(() => {

@@ -177,6 +177,13 @@ export async function userRoutes(app: FastifyInstance) {
   app.get('/users/:username/followers', async (request, reply) => {
     const { username } = request.params as { username: string }
 
+    let currentUserId: string | null = null
+    const authHeader = request.headers.authorization
+    if (authHeader?.startsWith('Bearer ')) {
+      const { data } = await supabase.auth.getUser(authHeader.slice(7))
+      if (data.user) currentUserId = data.user.id
+    }
+
     const user = await prisma.user.findUnique({ where: { username } })
 
     if (!user) {
@@ -200,9 +207,20 @@ export async function userRoutes(app: FastifyInstance) {
       orderBy: { id: 'desc' },
     })
 
+    let myFollowSet = new Set<string>()
+    if (currentUserId) {
+      const followerIds = follows.map((f) => f.follower.id)
+      const myFollows = await prisma.follow.findMany({
+        where: { followerId: currentUserId, followingId: { in: followerIds } },
+        select: { followingId: true },
+      })
+      myFollowSet = new Set(myFollows.map((f) => f.followingId))
+    }
+
     const followers = follows.map((f) => ({
       ...f.follower,
       tags: JSON.parse(f.follower.tags),
+      isFollowing: myFollowSet.has(f.follower.id),
     }))
 
     return reply.send({ followers, count: followers.length })
@@ -211,6 +229,13 @@ export async function userRoutes(app: FastifyInstance) {
   // GET /users/:username/following
   app.get('/users/:username/following', async (request, reply) => {
     const { username } = request.params as { username: string }
+
+    let currentUserId: string | null = null
+    const authHeader = request.headers.authorization
+    if (authHeader?.startsWith('Bearer ')) {
+      const { data } = await supabase.auth.getUser(authHeader.slice(7))
+      if (data.user) currentUserId = data.user.id
+    }
 
     const user = await prisma.user.findUnique({ where: { username } })
 
@@ -235,9 +260,20 @@ export async function userRoutes(app: FastifyInstance) {
       orderBy: { id: 'desc' },
     })
 
+    let myFollowSet = new Set<string>()
+    if (currentUserId) {
+      const followingIds = follows.map((f) => f.following.id)
+      const myFollows = await prisma.follow.findMany({
+        where: { followerId: currentUserId, followingId: { in: followingIds } },
+        select: { followingId: true },
+      })
+      myFollowSet = new Set(myFollows.map((f) => f.followingId))
+    }
+
     const following = follows.map((f) => ({
       ...f.following,
       tags: JSON.parse(f.following.tags),
+      isFollowing: myFollowSet.has(f.following.id),
     }))
 
     return reply.send({ following, count: following.length })
