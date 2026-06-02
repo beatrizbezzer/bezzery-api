@@ -12,6 +12,11 @@ function serializeUser(user: {
   bannerUrl: string | null
   tags: string
   country: string | null
+  bgImage: string | null
+  profileEffect: string | null
+  cardBorder: string | null
+  cardSticker: string | null
+  cardOverlay: string | null
   createdAt: Date
   _count: { followers: number; following: number; posts: number }
 }) {
@@ -25,6 +30,11 @@ function serializeUser(user: {
     bannerUrl: user.bannerUrl,
     tags: JSON.parse(user.tags) as string[],
     country: user.country,
+    bgImage: user.bgImage,
+    profileEffect: user.profileEffect,
+    cardBorder: user.cardBorder,
+    cardSticker: user.cardSticker,
+    cardOverlay: user.cardOverlay,
     createdAt: user.createdAt,
     followersCount: user._count.followers,
     followingCount: user._count.following,
